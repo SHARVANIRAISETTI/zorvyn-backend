@@ -59,6 +59,7 @@ SQLite was chosen for simplicity and zero-configuration setup, suitable for rapi
 | POST   | /api/auth/login                  | Public         | User authentication        |
 | GET    | /api/auth/me                     | All            | Get current user details   |
 | GET    | /api/records                     | All            | Retrieve all transactions  |
+| GET    | /api/records/recent-transactions | All            | Get recent transactions (limit query param) |
 | POST   | /api/records                     | Admin, Analyst | Create new transaction     |
 | DELETE | /api/records/:id                 | Admin          | Soft-delete transaction    |
 | GET    | /api/aggregations/net-balance    | All            | Financial position summary |
@@ -99,6 +100,9 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/auth/login" -Method POST -Head
 
 # Create record
 Invoke-RestMethod -Uri "http://localhost:5000/api/records" -Method POST -Headers @{ "Content-Type"="application/json"; "x-user-id"="2" } -Body '{"amount":500,"type":"Income","category":"Salary","date":"2026-04-01"}'
+
+# Get recent transactions (last 5)
+Invoke-RestMethod -Uri "http://localhost:5000/api/records/recent-transactions?limit=5" -Method GET -Headers @{ "x-user-id"="2" }
 
 # Get monthly summary
 Invoke-RestMethod -Uri "http://localhost:5000/api/aggregations/monthly-summary" -Method GET -Headers @{ "x-user-id"="2" }

@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { AppError } = require('../utils/error.utils');
-const { addRecord, retrieveUserTransactions, deleteRecord, calculateUserFinancialPosition } = require('../models/record.model');
+const { addRecord, retrieveUserTransactions, deleteRecord, calculateUserFinancialPosition, fetchRecentTransactions } = require('../models/record.model');
 
 const recordSchema = Joi.object({
   amount: Joi.number().strict().required().min(0.01),
@@ -17,6 +17,23 @@ const getRecords = async (req, res, next) => {
       success: true,
       message: 'Transactions retrieved successfully',
       data: results
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getRecentTransactions = async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit) || 10;
+    if (limit < 1 || limit > 50) throw new AppError(400, 'Limit must be between 1 and 50');
+
+    const results = await fetchRecentTransactions(limit);
+    res.json({
+      success: true,
+      message: 'Recent transactions retrieved successfully',
+      data: results,
+      meta: { limit, count: results.length }
     });
   } catch (err) {
     next(err);
@@ -64,4 +81,4 @@ const removeRecord = async (req, res, next) => {
   }
 };
 
-module.exports = { getRecords, createRecord, deleteRecord: removeRecord };
+module.exports = { getRecords, getRecentTransactions, createRecord, deleteRecord: removeRecord };

@@ -50,4 +50,20 @@ const getNetBalance = () => {
   });
 };
 
-module.exports = { addRecord, retrieveUserTransactions: getAllRecords, deleteRecord, calculateUserFinancialPosition: getNetBalance };
+const getRecentTransactions = (limit = 10) => {
+  return new Promise((resolve, reject) => {
+    const sql = `
+      SELECT id, userId, amount, type, category, date, notes, createdAt
+      FROM records
+      WHERE deletedAt IS NULL
+      ORDER BY createdAt DESC
+      LIMIT ?
+    `;
+    db.all(sql, [limit], (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows);
+    });
+  });
+};
+
+module.exports = { addRecord, retrieveUserTransactions: getAllRecords, deleteRecord, calculateUserFinancialPosition: getNetBalance, fetchRecentTransactions: getRecentTransactions };
