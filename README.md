@@ -70,3 +70,18 @@ Authentication is simulated using x-user-id header for testing. In production, J
 - Inactive users are restricted from accessing APIs
 - Soft-deleted records are excluded from queries
 - Unauthorized roles are blocked from sensitive operations
+
+## What Makes This Project Unique
+
+- Implements financial aggregation logic (net balance, category insights)
+- Includes soft delete for audit-safe financial records
+- Provides role-based access control (Admin, Analyst, Viewer)
+- Designed with modular architecture for scalability
+- Includes advanced analytics endpoint (monthly summary)
+
+## Why This Matters
+
+Unlike basic CRUD apps, this project simulates a real-world fintech backend system where:
+- Data integrity is preserved
+- Financial insights are computed efficiently
+- Access control is strictly enforced
