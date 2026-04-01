@@ -38,5 +38,7 @@ const computeMonthlySummary = () => {
     });
   });
 };
+// Aggregations are executed at the database level to reduce application-layer computation
+// and improve performance for large datasets.
 
 module.exports = { fetchNetBalance, computeCategoryInsights, computeMonthlySummary };
