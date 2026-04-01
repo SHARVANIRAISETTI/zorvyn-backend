@@ -50,4 +50,4 @@ const getNetBalance = () => {
   });
 };
 
-module.exports = { addRecord, getAllRecords, deleteRecord, getNetBalance };
+module.exports = { addRecord, retrieveUserTransactions: getAllRecords, deleteRecord, calculateUserFinancialPosition: getNetBalance };

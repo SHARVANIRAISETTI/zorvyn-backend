@@ -1,6 +1,6 @@
 const { db } = require('../config/db');
 
-const createUser = (user) => {
+const registerNewUser = (user) => {
   const { name, email, password, role, createdAt } = user;
   return new Promise((resolve, reject) => {
     const sql = 'INSERT INTO users (name, email, password, role, createdAt) VALUES (?, ?, ?, ?, ?)';
@@ -29,4 +29,4 @@ const findById = (id) => {
   });
 };
 
-module.exports = { createUser, findByEmail, findById };
+module.exports = { registerNewUser, findByEmail, findById };

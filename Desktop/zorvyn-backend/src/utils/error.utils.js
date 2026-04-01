@@ -8,7 +8,11 @@ class AppError extends Error {
 
 const handleError = (err, req, res, next) => {
   const status = err.statusCode || 500;
-  return res.status(status).json({ error: err.message || 'Internal Server Error' });
+  return res.status(status).json({
+    success: false,
+    message: err.message || 'Internal server error',
+    details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
 };
 
 module.exports = { AppError, handleError };

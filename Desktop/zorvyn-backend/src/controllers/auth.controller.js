@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const Joi = require('joi');
 const { AppError } = require('../utils/error.utils');
-const { createUser, findByEmail, findById } = require('../models/user.model');
+const { registerNewUser, findByEmail, findById } = require('../models/user.model');
 
 const registerSchema = Joi.object({
   name: Joi.string().min(2).required(),
@@ -30,8 +30,12 @@ const register = async (req, res, next) => {
       createdAt: new Date().toISOString(),
     };
 
-    const saved = await createUser(user);
-    return res.status(201).json({ id: saved.id, name: saved.name, email: saved.email, role: saved.role });
+    const saved = await registerNewUser(user);
+    return res.status(201).json({
+      success: true,
+      message: 'User registered successfully',
+      data: { id: saved.id, name: saved.name, email: saved.email, role: saved.role }
+    });
   } catch (err) {
     next(err);
   }
@@ -49,7 +53,11 @@ const login = async (req, res, next) => {
     if (!valid) throw new AppError(401, 'Invalid credentials');
 
     // token is user id as requested
-    return res.json({ token: user.id, role: user.role, name: user.name });
+    return res.json({
+      success: true,
+      message: 'Login successful',
+      data: { token: user.id, role: user.role, name: user.name }
+    });
   } catch (err) {
     next(err);
   }
@@ -59,7 +67,11 @@ const getMe = async (req, res, next) => {
   try {
     const user = await findById(req.user.id);
     if (!user) throw new AppError(401, 'User not found');
-    res.json({ id: user.id, name: user.name, email: user.email, role: user.role });
+    res.json({
+      success: true,
+      message: 'User retrieved successfully',
+      data: { id: user.id, name: user.name, email: user.email, role: user.role }
+    });
   } catch (err) {
     next(err);
   }

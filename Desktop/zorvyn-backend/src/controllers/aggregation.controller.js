@@ -1,13 +1,29 @@
 const { AppError } = require('../utils/error.utils');
-const { fetchNetBalance } = require('../services/aggregation.service');
+const { fetchNetBalance, computeMonthlySummary } = require('../services/aggregation.service');
 
-const getNetBalance = async (req, res, next) => {
+const calculateUserFinancialPosition = async (req, res, next) => {
   try {
     const data = await fetchNetBalance();
-    res.json(data);
+    res.json({
+      success: true,
+      data: data
+    });
   } catch (err) {
-    next(new AppError(500, 'Failed to fetch net balance'));
+    next(new AppError(500, 'Failed to calculate financial position'));
   }
 };
 
-module.exports = { getNetBalance };
+const getMonthlySummary = async (req, res, next) => {
+  try {
+    const data = await computeMonthlySummary();
+    res.json({
+      success: true,
+      message: 'Monthly financial summary retrieved successfully',
+      data: data
+    });
+  } catch (err) {
+    next(new AppError(500, 'Failed to compute monthly summary'));
+  }
+};
+
+module.exports = { calculateUserFinancialPosition, getMonthlySummary };

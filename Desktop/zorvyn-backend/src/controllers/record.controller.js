@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { AppError } = require('../utils/error.utils');
-const { addRecord, getAllRecords, deleteRecord } = require('../models/record.model');
+const { addRecord, retrieveUserTransactions, deleteRecord, calculateUserFinancialPosition } = require('../models/record.model');
 
 const recordSchema = Joi.object({
   amount: Joi.number().strict().required().min(0.01),
@@ -12,8 +12,12 @@ const recordSchema = Joi.object({
 
 const getRecords = async (req, res, next) => {
   try {
-    const results = await getAllRecords();
-    res.json(results);
+    const results = await retrieveUserTransactions();
+    res.json({
+      success: true,
+      message: 'Transactions retrieved successfully',
+      data: results
+    });
   } catch (err) {
     next(err);
   }
@@ -35,7 +39,11 @@ const createRecord = async (req, res, next) => {
     };
 
     const saved = await addRecord(newRecord);
-    res.status(201).json(saved);
+    res.status(201).json({
+      success: true,
+      message: 'Record created successfully',
+      data: saved
+    });
   } catch (err) {
     next(err);
   }
@@ -47,7 +55,10 @@ const removeRecord = async (req, res, next) => {
     if (!id) throw new AppError(400, 'Invalid record id');
     const removed = await deleteRecord(id);
     if (!removed) throw new AppError(404, 'Record not found');
-    res.json({ message: 'Record deleted' });
+    res.json({
+      success: true,
+      message: 'Record deleted successfully'
+    });
   } catch (err) {
     next(err);
   }
