@@ -179,6 +179,11 @@ This project was independently designed and implemented based on backend enginee
 No code was copied from external repositories or tutorials.
 
 ---
+## Design Philosophy
+
+The system is designed to prioritize simplicity, scalability, and data integrity. 
+By pushing computation to the database layer and maintaining a modular structure, 
+the backend can be extended easily for production-grade use cases.
 
 ## Conclusion
 
